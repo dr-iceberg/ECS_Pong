@@ -5,8 +5,8 @@ class Player
 public:
 	Player(sf::Keyboard::Key _up_key, sf::Keyboard::Key _down_key);
 	
-	sf::Keyboard::Key up_key;
-	sf::Keyboard::Key down_key;
+	const sf::Keyboard::Key up_key;
+	const sf::Keyboard::Key down_key;
 	int points = 0;
 	
 };

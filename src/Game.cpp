@@ -21,6 +21,10 @@ Game::Game()
     registry.emplace<sf::RectangleShape>(player, shape);
 
 
+
+    //event_dispatcher.sink<sf::Event::KeyPressed>().connect<&MoveSystem::onKeyPressed>(move_system);
+    //event_dispatcher.sink<sf::Event::KeyReleased>().connect<&MoveSystem::onKeyReleased>(move_system);
+
 }
 
 void Game::run()
@@ -40,13 +44,38 @@ void Game::run()
 
 void Game::update()
 {
+    static bool focused = true;
     while (const std::optional event = window.pollEvent())
     {
         if (event->is<sf::Event::Closed>())
             window.close();
+        else if (event->is<sf::Event::FocusGained>())
+        {
+            focused = true;
+        }
+        else if (event->is<sf::Event::FocusLost>())
+        {
+            focused = false;
+        }
+        /*
+        else if (event->is<sf::Event::KeyPressed>())
+        {
+            auto& ev = *event->getIf< sf::Event::KeyPressed>();
+            event_dispatcher.trigger<const sf::Event::KeyPressed>(std::move(ev));
+        }
+        else if (event->is<sf::Event::KeyReleased>())
+        {
+            const auto& ev = *event->getIf< sf::Event::KeyReleased>();
+            event_dispatcher.trigger<const sf::Event::KeyReleased>(std::move(ev));
+        }*/
     }
-
-    move_system.update(deltatime);
+    
+    // when window is not focused we dont want to update the movements
+    if (focused)
+    {
+        move_system.update(deltatime);
+    }
+    
 
 
 }

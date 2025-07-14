@@ -20,5 +20,5 @@ private:
 	sf::Time deltatime = sf::Time::Zero;
 	MoveSystem move_system;
 	RenderSystem render_system;
-	//entt::dispatcher event_dispatcher;
+	entt::dispatcher event_dispatcher;
 };
