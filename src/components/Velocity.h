@@ -1,4 +1,4 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-using Ball = sf::CircleShape;
+using Velocity = sf::Vector2f;

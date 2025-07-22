@@ -1,6 +1,8 @@
 #include "Game.h"
 #include "components/Player.h"
 #include "components/Position.h"
+#include "components/Velocity.h"
+#include "components/Ball.h"
 
 Game::Game()
     :
@@ -19,6 +21,19 @@ Game::Game()
     shape.setFillColor(sf::Color::Green);
 
     registry.emplace<sf::RectangleShape>(player, shape);
+
+
+    // Add a Ball
+    auto ball = registry.create();
+
+    Ball ball_shape;
+    ball_shape.setRadius(10.f);
+    ball_shape.setFillColor(sf::Color::White);
+    ball_shape.setPosition({ window.getSize().x / 2.f, window.getSize().y / 2.f });
+    Velocity ball_vel = { 600.f, 600.f };
+
+    registry.emplace<sf::CircleShape>(ball, ball_shape);
+    registry.emplace<Velocity>(ball, ball_vel);
 
 
 
@@ -57,6 +72,7 @@ void Game::update()
         {
             focused = false;
         }
+        // using event dispatcher
         /*
         else if (event->is<sf::Event::KeyPressed>())
         {

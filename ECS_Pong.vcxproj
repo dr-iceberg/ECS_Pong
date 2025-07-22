@@ -143,6 +143,7 @@
     <ClInclude Include="src\components\Ball.h" />
     <ClInclude Include="src\components\Player.h" />
     <ClInclude Include="src\components\Position.h" />
+    <ClInclude Include="src\components\Velocity.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\systems\MoveSystem.h" />
     <ClInclude Include="src\systems\RenderSystem.h" />

@@ -53,5 +53,8 @@
     <ClInclude Include="src\components\Ball.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\components\Velocity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

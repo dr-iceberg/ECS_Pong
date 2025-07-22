@@ -1,4 +1,5 @@
 #include "RenderSystem.h"
+#include "../components/Ball.h"
 
 RenderSystem::RenderSystem(sf::RenderWindow& _window, entt::registry& _registry)
 	:
@@ -10,9 +11,14 @@ RenderSystem::RenderSystem(sf::RenderWindow& _window, entt::registry& _registry)
 
 void RenderSystem::render()
 {
-	auto render_view = registry.view<sf::RectangleShape>();
-	render_view.each([&](sf::RectangleShape& rect)
+	auto rect_view = registry.view<sf::RectangleShape>();
+	rect_view.each([&](sf::RectangleShape& rect)
 		{
 			window.draw(rect);
+		});
+	auto ball_view = registry.view<Ball>();
+	ball_view.each([&](Ball& ball)
+		{
+			window.draw(ball);
 		});
 }
