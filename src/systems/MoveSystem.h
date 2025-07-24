@@ -10,6 +10,7 @@ public:
 	void onKeyReleased(const sf::Event::KeyReleased key_released) {};
 
 private:
+	sf::Vector2f predictBallPos(const sf::Time& _deltatime);
 	entt::registry& registry;
 	sf::Vector2u window_size;
 	sf::Time deltatime = sf::Time::Zero;

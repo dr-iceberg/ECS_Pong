@@ -132,6 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\components\AI.cpp" />
     <ClCompile Include="src\components\Player.cpp" />
     <ClCompile Include="src\components\Position.cpp" />
     <ClCompile Include="src\Game.cpp" />
@@ -140,6 +141,7 @@
     <ClCompile Include="src\systems\RenderSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\components\AI.h" />
     <ClInclude Include="src\components\Ball.h" />
     <ClInclude Include="src\components\Player.h" />
     <ClInclude Include="src\components\Position.h" />

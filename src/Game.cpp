@@ -3,6 +3,7 @@
 #include "components/Position.h"
 #include "components/Velocity.h"
 #include "components/Ball.h"
+#include "components/AI.h"
 
 Game::Game()
     :
@@ -22,6 +23,15 @@ Game::Game()
 
     registry.emplace<sf::RectangleShape>(player, shape);
 
+    // Add AI
+    auto ai_player = registry.create();
+    registry.emplace<AI>(ai_player);
+
+    sf::RectangleShape ai_shape{ sf::Vector2f(10.f, 50.f) };
+    ai_shape.setPosition({ window.getSize().x - ai_shape.getSize().x - 10.f , 10.f});
+    ai_shape.setFillColor(sf::Color::Blue);
+
+    registry.emplace<sf::RectangleShape>(ai_player, ai_shape);
 
     // Add a Ball
     auto ball = registry.create();

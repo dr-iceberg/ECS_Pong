@@ -33,6 +33,9 @@
     <ClCompile Include="src\systems\RenderSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\components\AI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.h">
@@ -54,6 +57,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\components\Velocity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\AI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

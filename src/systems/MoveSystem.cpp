@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "../components/Ball.h"
 #include "../components/Velocity.h"
+#include "../components/AI.h"
 
 
 MoveSystem::MoveSystem(sf::Vector2u _window_size, entt::registry& _registry)
@@ -17,17 +18,18 @@ void MoveSystem::update(const sf::Time _deltatime)
 {
 	deltatime = _deltatime;
 
+	static const float player_vel = 500.f;
 	
 	auto player_view = registry.view<Player, sf::RectangleShape>();
 	player_view.each([&](Player& player, sf::RectangleShape& rect)
 		{
 			if (sf::Keyboard::isKeyPressed(player.up_key))
 			{
-				rect.move({ 0, -500.f * deltatime.asSeconds()});
+				rect.move({ 0, -player_vel * deltatime.asSeconds()});
 			}
 			else if (sf::Keyboard::isKeyPressed(player.down_key))
 			{
-				rect.move({ 0, 500.f * deltatime.asSeconds()});
+				rect.move({ 0, player_vel * deltatime.asSeconds()});
 			}
 
 			if (rect.getPosition().y < 0)
@@ -40,7 +42,7 @@ void MoveSystem::update(const sf::Time _deltatime)
 			}
 		});
 
-
+	auto players_view = registry.view<sf::RectangleShape>();
 	auto ball_view = registry.view<Ball, Velocity>();
 	ball_view.each([&](Ball& ball, Velocity& vel)
 		{
@@ -50,8 +52,8 @@ void MoveSystem::update(const sf::Time _deltatime)
 			ball.move({ vel.x * deltatime.asSeconds(), vel.y * deltatime.asSeconds()});
 			
 
-			// player collision
-			player_view.each([&](Player& player, sf::RectangleShape& rect)
+			// player and ai collision
+			players_view.each([&](sf::RectangleShape& rect)
 				{
 					const auto& player_size = rect.getSize();
 					const auto& player_pos = rect.getPosition();
@@ -121,6 +123,61 @@ void MoveSystem::update(const sf::Time _deltatime)
 				//ball.setPosition({ ball_pos.x, window_size.y - 2*ball_radius });
 			}
 		});
+
+
+	auto ai_view = registry.view<AI, sf::RectangleShape>();
+	ai_view.each([&](AI& ai, sf::RectangleShape& rect)
+		{
+			const auto& ai_pos = rect.getPosition();
+			const auto& ai_size = rect.getSize();
+
+			ball_view.each([&](Ball& ball, Velocity& vel)
+				{
+					const auto& ball_pos = ball.getPosition();
+					const auto& ball_radius = ball.getRadius();
+					
+					/*
+					// old primitive system
+					if (ai_pos.y < ball_pos.y)
+					{
+						rect.move({ 0, player_vel * deltatime.asSeconds() });
+					}
+					else if (ai_pos.y > ball_pos.y)
+					{
+						rect.move({ 0, -player_vel * deltatime.asSeconds() });
+					}
+					*/
+					if (vel.x > 0)
+					{
+						sf::Vector2f predicted_pos = predictBallPos(deltatime);
+
+						if (ai_pos.y < predicted_pos.y - (ai_size.y / 2.f))
+						{
+							rect.move({ 0, player_vel * deltatime.asSeconds() });
+						}
+						else if (ai_pos.y > predicted_pos.y - (ai_size.y / 2.f))
+						{
+							rect.move({ 0, -player_vel * deltatime.asSeconds() });
+						}
+					}
+					else
+					{
+						if (ai_pos.y < window_size.y / 2.f - (ai_size.y / 2.f))
+						{
+							rect.move({ 0, player_vel * deltatime.asSeconds() });
+						}
+						else if (ai_pos.y > window_size.y / 2.f - (ai_size.y / 2.f))
+						{
+							rect.move({ 0, -player_vel * deltatime.asSeconds() });
+						}
+					}
+
+
+				});
+
+
+		});
+
 	
 }
 // not used currently
@@ -152,4 +209,51 @@ void MoveSystem::onKeyPressed(const sf::Event::KeyPressed key_pressed)
 		});
 	
 
+}
+
+sf::Vector2f MoveSystem::predictBallPos(const sf::Time& _deltatime)
+{
+	sf::Vector2f predicted_pos;
+
+	auto ball_view = registry.view<Ball, Velocity>();
+	ball_view.each([&](Ball& ball, Velocity& vel)
+		{
+			const auto& ball_pos = ball.getPosition();
+			const auto& ball_radius = ball.getRadius();
+
+			Velocity predicted_vel = vel;
+			predicted_pos = ball_pos;
+
+			while (predicted_pos.x + 2*ball_radius <= window_size.x)
+			{
+				predicted_pos.x = predicted_pos.x + predicted_vel.x * deltatime.asSeconds();
+				predicted_pos.y = predicted_pos.y + predicted_vel.y * deltatime.asSeconds();
+
+
+				if (predicted_pos.x < 0)
+				{
+					predicted_vel.x = abs(predicted_vel.x);
+					
+				}
+				else if (predicted_pos.x + 2 * ball_radius > window_size.x)
+				{
+					predicted_vel.x = abs(predicted_vel.x) * -1;
+					
+				}
+
+				if (predicted_pos.y < 0)
+				{
+					predicted_vel.y = abs(predicted_vel.y);
+					
+				}
+				else if (predicted_pos.y + 2 * ball_radius > window_size.y)
+				{
+					predicted_vel.y = abs(predicted_vel.y) * -1;
+					
+				}
+			}
+		});
+
+
+	return predicted_pos;
 }
