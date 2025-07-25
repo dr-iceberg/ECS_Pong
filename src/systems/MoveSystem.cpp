@@ -80,7 +80,7 @@ void MoveSystem::update(const sf::Time _deltatime)
 
 					// lower side of player
 					if (ball_pos.y < player_pos.y + player_size.y 
-						&& ball_pos.y > player_pos.y
+						&& ball_pos.y > player_pos.y + player_size.y / 2.f
 						&& player_pos.x < ball_pos.x 
 						&& ball_pos.x < player_pos.x + player_size.x)
 					{
@@ -88,7 +88,7 @@ void MoveSystem::update(const sf::Time _deltatime)
 						//ball.setPosition({ ball_pos.x, player_pos.y + player_size.y });
 					}
 					// upper side of player
-					else if (player_pos.y + player_size.y > ball_pos.y + 2 * ball_radius 
+					else if (player_pos.y + player_size.y / 2.f > ball_pos.y + 2 * ball_radius
 						&& ball_pos.y + 2 * ball_radius  > player_pos.y
 						&& player_pos.x < ball_pos.x 
 						&& ball_pos.x < player_pos.x + player_size.x)
@@ -124,7 +124,8 @@ void MoveSystem::update(const sf::Time _deltatime)
 			}
 		});
 
-
+	// limited ammount of predictions to help with ai player stuttering
+	//static int predictions = 0;
 	auto ai_view = registry.view<AI, sf::RectangleShape>();
 	ai_view.each([&](AI& ai, sf::RectangleShape& rect)
 		{
@@ -147,7 +148,8 @@ void MoveSystem::update(const sf::Time _deltatime)
 						rect.move({ 0, -player_vel * deltatime.asSeconds() });
 					}
 					*/
-					if (vel.x > 0)
+					
+					if (vel.x > 0 )//&& predictions < 10)
 					{
 						sf::Vector2f predicted_pos = predictBallPos(deltatime);
 
@@ -159,9 +161,12 @@ void MoveSystem::update(const sf::Time _deltatime)
 						{
 							rect.move({ 0, -player_vel * deltatime.asSeconds() });
 						}
+
+						//predictions += 1;
 					}
 					else
 					{
+						//predictions = 0;
 						if (ai_pos.y < window_size.y / 2.f - (ai_size.y / 2.f))
 						{
 							rect.move({ 0, player_vel * deltatime.asSeconds() });
