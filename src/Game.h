@@ -21,4 +21,7 @@ private:
 	MoveSystem move_system;
 	RenderSystem render_system;
 	entt::dispatcher event_dispatcher;
+
+	sf::Color bg_color{ 30, 30, 30 };
+
 };

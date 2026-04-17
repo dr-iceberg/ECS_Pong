@@ -138,16 +138,19 @@
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\systems\MoveSystem.cpp" />
+    <ClCompile Include="src\systems\ParticleSystem.cpp" />
     <ClCompile Include="src\systems\RenderSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\components\AI.h" />
     <ClInclude Include="src\components\Ball.h" />
+    <ClInclude Include="src\components\Particle.h" />
     <ClInclude Include="src\components\Player.h" />
     <ClInclude Include="src\components\Position.h" />
     <ClInclude Include="src\components\Velocity.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\systems\MoveSystem.h" />
+    <ClInclude Include="src\systems\ParticleSystem.h" />
     <ClInclude Include="src\systems\RenderSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -108,7 +108,7 @@ void Game::update()
 
 void Game::render()
 {
-    window.clear();
+    window.clear(bg_color);
 
     render_system.render();
 
