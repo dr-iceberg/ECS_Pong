@@ -153,6 +153,12 @@
     <ClInclude Include="src\systems\ParticleSystem.h" />
     <ClInclude Include="src\systems\RenderSystem.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md">
+      <SubType>
+      </SubType>
+    </None>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
